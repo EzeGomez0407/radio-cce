@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { IoPauseCircleOutline } from "react-icons/io5";
-import "../App.css";
+import "./styles/RadioPlayer.css";
 import { usePlayerFM } from "../service/usePlayerFM";
 
 export default function RadioPlayer() {
@@ -14,7 +14,7 @@ export default function RadioPlayer() {
   }
   return (
     <>
-      <div className="bg-white min-w-[95%] fixed inset-x-2.5 bottom-6 rounded-[8px] flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black ">
+      <div className="bg-white min-w-[95%] fixed inset-x-2.5 bottom-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black ">
         <button data-playing="false" onClick={handleMusic} id="btn-play-pause" className="text-[#242424] active:outline-1 active:text-[85px]">
           {
             playOrPause === false ? <span className="text-[90px] text-red-400"><IoPlayCircleOutline /></span> : <span className="text-[90px] text-blue-500" ><IoPauseCircleOutline /></span>

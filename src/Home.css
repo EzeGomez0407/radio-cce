@@ -1,4 +1,11 @@
 @import "tailwindcss";
+/* color primario: #1791cf */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  /* padding: 2rem; */
+  text-align: center;
+}
 
 .div-welcome{
     background-image: url('/bg-welcome.jpg');
