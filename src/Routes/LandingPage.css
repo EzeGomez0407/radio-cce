@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.div-welcome{
+    background-image: url('/bg-welcome.jpg');
+    background-size: cover;
+    background-position: -35px;
+    overflow: hidden;
+    /* filter: blur(2px); */
+
+}
+
+.text-welcome{
+    text-shadow: 2px 2px 10px #242424;
+}
