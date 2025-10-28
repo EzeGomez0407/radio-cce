@@ -1,7 +1,7 @@
+import "./styles/RadioPlayer.css";
 import { useState } from "react";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { IoPauseCircleOutline } from "react-icons/io5";
-import "./styles/RadioPlayer.css";
 import { usePlayerFM } from "../service/usePlayerFM";
 
 export default function RadioPlayer() {

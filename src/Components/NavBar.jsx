@@ -25,12 +25,12 @@ export default function NavBar(){
                 >
                   Eventos
                 </NavLink>
-                <a
+                <NavLink
                   className="text-white hover:text-[#707070] font-medium transition-colors hover:text-primary"
-                  href="#"
+                  to="church"
                 >
-                  Iglesia
-                </a>
+                  Contacto
+                </NavLink>
               </div>
             </nav>
           </header>
