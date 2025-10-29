@@ -23,7 +23,7 @@ export default function RadioPlayer() {
         </button>
         <input type="range" onChange={handleVolume} min={0} max={1} step={0.01} className="w-[60%] h-10"/>
         <audio id="player-fm"
-          src="http://shaincast.caster.fm:21547/listen.mp3?authnad926f45a26e4c2363d651fa2605d9cd"
+          src="https://shaincast.caster.fm:21547/listen.mp3?authnad926f45a26e4c2363d651fa2605d9cd"
         ></audio>
         {/* <audio id="player-fm"
           src="/alaben.mp3"
