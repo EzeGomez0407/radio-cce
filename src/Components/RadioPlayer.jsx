@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { IoPauseCircleOutline } from "react-icons/io5";
 import { usePlayerFM } from "../service/usePlayerFM";
+import logoCCE from '/logo.png'
 
 export default function RadioPlayer() {
   const [playOrPause, setPlayOrPause] = useState(false)
@@ -15,15 +16,19 @@ export default function RadioPlayer() {
   return (
     <>
       <div className="bg-white min-w-[95%] fixed inset-x-2.5 bottom-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black ">
-        <button data-playing="false" onClick={handleMusic} id="btn-play-pause" className="text-[#242424] active:outline-1 active:text-[85px]">
-          {
-            playOrPause === false ? <span className="text-[90px] text-red-400"><IoPlayCircleOutline /></span> : <span className="text-[90px] text-blue-500" ><IoPauseCircleOutline /></span>
-          }
-          
-        </button>
+        <div className="relative">
+          {/* ESTABA AGREGANDO LA ANIMACION DE PLAY XD */}
+          <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/>
+          <button data-playing="false" onClick={handleMusic} id="btn-play-pause" className="relative text-[#242424] active:outline-1 active:text-[85px] z-500">
+            {
+              playOrPause === false ? <span className="text-[90px] text-red-400 z-600"><IoPlayCircleOutline /></span> : <span className="text-[90px] text-blue-800 z-600" ><IoPauseCircleOutline /></span>
+            }
+            
+          </button>
+        </div>
         <input type="range" onChange={handleVolume} min={0} max={1} step={0.01} className="w-[60%] h-10"/>
         <audio id="player-fm"
-          src="https://shaincast.caster.fm:21547/listen.mp3?authnad926f45a26e4c2363d651fa2605d9cd"
+          src="https://sapircast.caster.fm:17661/PEPBf?token=617648bfed600045cec7b5f0a0ccc75e"
         ></audio>
         {/* <audio id="player-fm"
           src="/alaben.mp3"
@@ -32,34 +37,3 @@ export default function RadioPlayer() {
     </>
   );
 }
-
-// Radio Fernando
-
-/* <!--   DO NOT REMOVE THE LINKS BELOW, THEY  WILL BE HIDDEN (AND WILL HELP US A LOT)   -->	 */
-/* <a id="cstrFreePlayerBL1" href="//www.caster.fm/">
-          Free Shoutcast Hosting
-        </a>
-        <a id="cstrFreePlayerBL2" href="//www.caster.fm/">
-          Radio Stream Hosting
-        </a>{" "}
-        <div id="cstrFreePlayerDiv"></div> */
-
-// useEffect(() => {
-//   const scriptVars = document.createElement("script");
-//   scriptVars.type = "text/javascript";
-//   scriptVars.innerHTML = `
-//     var cstrFreePlayerUid = 571727;
-//     var cstrFreePlayerTheme = "purple";
-//     var cstrFreePlayerColor = "";
-//   `;
-//   document.body.appendChild(scriptVars);
-
-//   const script = document.createElement("script");
-//   script.src = "//corscdn.caster.fm/freeplayer/FreePlanPlayerEmbed.js";
-//   document.body.appendChild(script);
-
-//   return () => {
-//     document.body.removeChild(script);
-//     document.body.removeChild(scriptVars);
-//   };
-// }, []);
