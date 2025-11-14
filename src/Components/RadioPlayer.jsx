@@ -18,7 +18,7 @@ export default function RadioPlayer() {
       <div className="bg-white min-w-[95%] fixed inset-x-2.5 bottom-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black ">
         <div className="relative">
           {/* ESTABA AGREGANDO LA ANIMACION DE PLAY XD */}
-          <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/>
+          {/* <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/> */}
           <button data-playing="false" onClick={handleMusic} id="btn-play-pause" className="relative text-[#242424] active:outline-1 active:text-[85px] z-500">
             {
               playOrPause === false ? <span className="text-[90px] text-red-400 z-600"><IoPlayCircleOutline /></span> : <span className="text-[90px] text-blue-800 z-600" ><IoPauseCircleOutline /></span>
@@ -31,7 +31,6 @@ export default function RadioPlayer() {
           // src="http://shaincast.caster.fm:21547/listen.mp3?authnc1c7f89d586328d674d9a66cf55a2ee4"
           src="https://stream.zeno.fm/gaa51gprq18uv"
         >
-          {/* <source src="https://stream.zeno.fm/gaa51gprq18uv" type="audio/mpeg"></source> */}
         </audio>
         {/* <audio id="player-fm"
           src="/alaben.mp3"
