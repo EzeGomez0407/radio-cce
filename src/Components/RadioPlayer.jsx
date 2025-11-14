@@ -28,7 +28,7 @@ export default function RadioPlayer() {
         </div>
         <input type="range" onChange={handleVolume} min={0} max={1} step={0.01} className="w-[60%] h-10"/>
         <audio id="player-fm"
-          src="https://sapircast.caster.fm:17661/PEPBf?token=617648bfed600045cec7b5f0a0ccc75e"
+          src="http://shaincast.caster.fm:21547/listen.mp3?authnc1c7f89d586328d674d9a66cf55a2ee4"
         ></audio>
         {/* <audio id="player-fm"
           src="/alaben.mp3"
