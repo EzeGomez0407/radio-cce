@@ -18,7 +18,7 @@ export default function RadioPlayer() {
     setIsLoading(false)
   }
   return (
-      <div className="bg-white fixed bottom-6 right-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black sm:w-[500px] w-[95%]" id="player-content">
+      <div className="bg-white fixed bottom-6 right-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black sm:w-[500px] max-sm:inset-x-2.5 w-[95%]" id="player-content">
         <div className="relative">
           {/* ESTABA AGREGANDO LA ANIMACION DE PLAY XD */}
           {/* <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/> */}
