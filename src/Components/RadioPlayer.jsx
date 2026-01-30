@@ -18,8 +18,7 @@ export default function RadioPlayer() {
     setIsLoading(false)
   }
   return (
-    <>
-      <div className="bg-white min-w-[95%] fixed inset-x-2.5 bottom-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black ">
+      <div className="bg-white fixed bottom-6 right-6 rounded-lg flex px-10 py-3 items-center justify-between gap-3 shadow-2xl shadow-black sm:w-[500px] w-[95%]" id="player-content">
         <div className="relative">
           {/* ESTABA AGREGANDO LA ANIMACION DE PLAY XD */}
           {/* <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/> */}
@@ -55,13 +54,8 @@ export default function RadioPlayer() {
         <audio
           onPlay={handlePlaying}
           id="player-fm"
-          // src="http://shaincast.caster.fm:21547/listen.mp3?authnc1c7f89d586328d674d9a66cf55a2ee4"
           src="https://stream.zeno.fm/gaa51gprq18uv"
         ></audio>
-        {/* <audio id="player-fm"
-          src="/alaben.mp3"
-        ></audio> */}
       </div>
-    </>
   );
 }
