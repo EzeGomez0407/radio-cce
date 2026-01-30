@@ -3,15 +3,19 @@ import { useState } from "react";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import { IoPauseCircleOutline } from "react-icons/io5";
 import { usePlayerFM } from "../service/usePlayerFM";
-import logoCCE from '/logo.png'
 
 export default function RadioPlayer() {
-  const [playOrPause, setPlayOrPause] = useState(false)
-  const {handlePlayPause, handleVolume} = usePlayerFM()
-  
-  const handleMusic = (e)=>{
-    handlePlayPause(e)
-    setPlayOrPause(!playOrPause)
+  const [isLoading, setIsLoading] = useState(false);
+  const [playOrPause, setPlayOrPause] = useState(false);
+  const { handlePlayPause, handleVolume } = usePlayerFM();
+
+  const handleMusic = async (e) => {
+    handlePlayPause(e, setIsLoading);
+    
+    setPlayOrPause(!playOrPause);
+  };
+  const handlePlaying = ()=>{
+    setIsLoading(false)
   }
   return (
     <>
@@ -19,19 +23,41 @@ export default function RadioPlayer() {
         <div className="relative">
           {/* ESTABA AGREGANDO LA ANIMACION DE PLAY XD */}
           {/* <img src={logoCCE} alt="" className="absolute w-100 -top-1 z-300 -left-1.5 blur-[2px]"/> */}
-          <button data-playing="false" onClick={handleMusic} id="btn-play-pause" className="relative text-[#242424] active:outline-1 active:text-[85px] z-500">
-            {
-              playOrPause === false ? <span className="text-[90px] text-red-400 z-600"><IoPlayCircleOutline /></span> : <span className="text-[90px] text-blue-800 z-600" ><IoPauseCircleOutline /></span>
-            }
-            
-          </button>
+          {isLoading ? (
+            <div className="w-20 h-20 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          ) : (
+            <button
+              data-playing="false"
+              onClick={handleMusic}
+              id="btn-play-pause"
+              className="relative text-[#242424] active:outline-1 active:text-[85px] z-500"
+            >
+              {playOrPause === false ? (
+                <span className="text-[80px] text-red-400 z-600">
+                  <IoPlayCircleOutline />
+                </span>
+              ) : (
+                <span className="text-[80px] text-blue-800 z-600">
+                  <IoPauseCircleOutline />
+                </span>
+              )}
+            </button>
+          )}
         </div>
-        <input type="range" onChange={handleVolume} min={0} max={1} step={0.01} className="w-[60%] h-10"/>
-        <audio id="player-fm"
+        <input
+          type="range"
+          onChange={handleVolume}
+          min={0}
+          max={1}
+          step={0.01}
+          className="w-[60%] h-10"
+        />
+        <audio
+          onPlay={handlePlaying}
+          id="player-fm"
           // src="http://shaincast.caster.fm:21547/listen.mp3?authnc1c7f89d586328d674d9a66cf55a2ee4"
           src="https://stream.zeno.fm/gaa51gprq18uv"
-        >
-        </audio>
+        ></audio>
         {/* <audio id="player-fm"
           src="/alaben.mp3"
         ></audio> */}

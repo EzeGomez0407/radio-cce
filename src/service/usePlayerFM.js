@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 export function usePlayerFM() {
-  // const audioContext = useMemo(()=>(new AudioContext()),[]) 
   const audioElemRef = useRef(null);
   const [playBtn, setPlayBtn] = useState();
-  // const trackRef = useRef(null)
   
   useEffect(() => {
     const elemAudio = document.getElementById("player-fm");
@@ -16,13 +14,15 @@ export function usePlayerFM() {
     setPlayBtn(btnPlayPause);
   }, []);
   
-  const handlePlayPause = (e) => {
+  const handlePlayPause = (e,setIsLoading) => {
     e.preventDefault()
     if (!audioElemRef.current || !playBtn) return;
-    console.log(audioElemRef);
     // Play or pause track depending on state
     if (playBtn.dataset.playing === "false") {
-      audioElemRef.current.play();
+      setIsLoading(true)
+      audioElemRef.current.play()
+      
+      
       playBtn.dataset.playing = "true";
     } else if (playBtn.dataset.playing === "true") {
       audioElemRef.current.pause();
