@@ -1,4 +1,4 @@
-import { Button, Card, CloseButton } from "@heroui/react";
+import { Button, Card } from "@heroui/react";
 
 export default function Events() {
   return (
