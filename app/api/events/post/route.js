@@ -6,8 +6,8 @@ export async function POST(request) {
   const body = await request.json();
 
   const { data, error } = await supabase
-    .from("productos")
-    .insert([{ nombre: body.nombre, precio: body.precio }])
+    .from("events")
+    .insert([{ type: body.type, data: body.data }])
     .select(); // El .select() devuelve el objeto creado
 
   if (error) {
