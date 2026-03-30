@@ -3,7 +3,8 @@ import { Button, Card } from "@heroui/react";
 export default function Events() {
   return (
     <>
-      <Card className="w-full items-stretch md:flex-row">
+      <Card className="relative w-full items-stretch md:flex-row">
+        <Chip color="warning">Warning</Chip>
         <div className="overflow-hidden rounded-2xl h-[260px]">
           <img
             alt="Cherries"
