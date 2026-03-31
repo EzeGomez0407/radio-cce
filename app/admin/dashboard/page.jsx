@@ -8,8 +8,10 @@ import {
   Calendar,
   DateField,
   DatePicker,
+  Button,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
+import { isArray } from "util";
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
@@ -32,14 +34,23 @@ export default function Dashboard() {
     }));
   };
   useEffect(() => {
+    
     setEvent((event) => ({
       ...event,
-      time: `${time.hour}:${time.minute}`,
-      date: `${date.day}/${date.month}/${date.year}`,
+      time: time,
     }));
 
     console.log(event);
-  }, [time, date]);
+  }, [time]);
+
+  useEffect(() => {    
+    setEvent((event) => ({
+      ...event,
+      date: date,
+    }));
+
+    console.log(event);
+  }, [date]);
 
   useEffect(() => {
     setMounted(true);
@@ -52,7 +63,7 @@ export default function Dashboard() {
   return (
     <div className="w-full">
       <Card className="w-full items-stretch md:flex-row">
-        <div className=" rounded-2xl h-[260px] w-[400px]">
+        <div className=" rounded-2xl h-65 w-100">
           <button className="w-full h-full bg-gray-200 rounded-2xl border-2 border-gray-400"></button>
         </div>
         <div className="flex flex-1 flex-col gap-2">
@@ -61,7 +72,7 @@ export default function Dashboard() {
               <Input
                 fullWidth
                 placeholder="Título del evento"
-                className="border-1 border-blue-50 text-2xl py-1"
+                className="border border-blue-50 text-2xl py-1"
                 name="title"
                 onChange={handleChange}
               />
@@ -70,7 +81,7 @@ export default function Dashboard() {
               <TextArea
                 fullWidth
                 placeholder="Añade una descripción al evento..."
-                className="border-1 border-blue-50 h-25"
+                className="border border-blue-50 h-25"
                 name="description"
                 onChange={handleChange}
               />
@@ -90,6 +101,7 @@ export default function Dashboard() {
             </div>
           </Card.Footer>
         </div>
+        <Button onClick={()=>{validateDataAddEvent(event)}}>Agregar evento</Button>
       </Card>
     </div>
   );
@@ -136,4 +148,56 @@ function DatePickerComponent({ onChange }) {
       </DatePicker.Popover>
     </DatePicker>
   );
+}
+
+import z from "zod"
+
+export function validateDataAddEvent(dataEvent){
+  const dataEventFormated = dataEvent;
+  const today = new Date()  
+  const date = new Date(dataEvent.date.year, dataEvent.date.month-1, dataEvent.date.day)
+  let dateFormated = ""
+  let time = ""
+  
+  // Comprobamos que la fecha sea mayor que "hoy"
+  if(today > date) return {error:[{path: ["date"],message: "La fecha que seleccionó ya pasó."}]}
+
+  if(date.getDay() < 10) dateFormated = `0${date.getDay()}/`
+  else dateFormated = `${date.getDay()}/`
+  
+  if(date.getMonth() < 10) dateFormated = dateFormated + `0${date.getMonth()}/`
+  else dateFormated = dateFormated + `${date.getMonth()}/`
+
+  dateFormated = dateFormated + `${date.getFullYear()}`
+  dataEventFormated.date = dateFormated
+
+  // Comprobamos que se haya seleccionado una hora
+  if(!dataEvent.time) return {error:[{path: ["time"],message: "Especifique la hora"}]}
+
+  // Formateo de hora seleccionada
+  if(dataEvent.time.hour < 10) time = `0${dataEvent.time.hour}:`
+  else time = `${dataEvent.time.hour}:`
+
+  if(dataEvent.time.minute < 10) time = time + `0${dataEvent.time.minute}`
+  else time = time + dataEvent.time.minute
+
+  dataEventFormated.time = time
+  
+  const Event = z.object({
+    title: z.string().min(5,"El titulo debe tener al menos 5 caracteres."),
+    description: z.string().min(10,"La descripción debe tener al menos 10 caracteres."),
+    time: z.string(),
+    date: z.string()
+  })
+
+  const {success, error, data} = Event.safeParse(dataEventFormated)
+
+  if(!success){
+    console.log(error.issues);
+    return {error: error.issues}    
+  }
+  console.log(data);
+  
+  return {data, error: null}
+  
 }

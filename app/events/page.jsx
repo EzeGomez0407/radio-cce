@@ -23,7 +23,7 @@ export default async function Events() {
           <Chip color="warning" className="absolute top-3 right-3">
             {event.type}
           </Chip>
-          <div className="overflow-hidden rounded-2xl h-[260px]">
+          <div className="overflow-hidden rounded-2xl h-65">
             <img
               alt="Cherries"
               className="h-full w-full object-cover "
