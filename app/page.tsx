@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-12">
       <section className="@container">
-        <div className="relative flex min-h-[300px] flex-col items-center justify-center gap-6 rounded-xl bg-cover bg-center text-center ">
+        <div className="relative flex min-h-75 flex-col items-center justify-center gap-6 rounded-xl bg-cover bg-center text-center ">
           <div className="div-welcome rounded-lg">
             <div className="flex flex-col px-5 backdrop-contrast-50 backdrop-brightness-120 backdrop-blur-[2px]">
               <h1 className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl w-full h-full p-2 pt-8 text-welcome">
@@ -102,7 +102,7 @@ export default function Home() {
                 mensaje de esperanza y renovación para todos.
               </p>
               <div className="mt-2 border-gray-900 border w-fit rounded-full">
-                <button className="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden bg-primary px-6 text-base font-bold text-[#242424] transition-opacity hover:opacity-80 ">
+                <button className="flex h-10 min-w-21 max-w-120 cursor-pointer items-center justify-center overflow-hidden bg-primary px-6 text-base font-bold text-[#242424] transition-opacity hover:opacity-80 ">
                   <span className="truncate">Leer Más</span>
                 </button>
               </div>
