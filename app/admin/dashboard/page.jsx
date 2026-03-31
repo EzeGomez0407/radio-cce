@@ -11,10 +11,15 @@ import {
   Button,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { isArray } from "util";
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState({
+    title: " ",
+    description: " ",
+    time: " ",
+    date: " ",
+  });
   const [event, setEvent] = useState({
     title: "",
     description: "",
@@ -26,15 +31,49 @@ export default function Dashboard() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    setErrorMsg(({
+      title: " ",
+      description: " ",
+      time: " ",
+      date: " ",
+    }))
     console.log(name, ": ", value);
     setEvent((event) => ({
       ...event,
       [name]: value,
     }));
   };
+
+  const handleOnClick = async (e) => {
+    e.preventDefault();
+
+    const { data, error } = validateDataAddEvent(event);
+
+    if (error) {
+      for (let i = 0; i < error.length; i++) {
+        setErrorMsg((err) => ({
+          ...err,
+          [error[i].path[0]]: error[i].message,
+        }));
+      }
+      return
+    }
+
+    try {
+      const res = await fetch("/api/events/post",{
+        method: "POST",
+        body: JSON.stringify({type: "semanal", data}),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
   useEffect(() => {
-    
     setEvent((event) => ({
       ...event,
       time: time,
@@ -43,7 +82,7 @@ export default function Dashboard() {
     console.log(event);
   }, [time]);
 
-  useEffect(() => {    
+  useEffect(() => {
     setEvent((event) => ({
       ...event,
       date: date,
@@ -66,8 +105,8 @@ export default function Dashboard() {
         <div className=" rounded-2xl h-65 w-100">
           <button className="w-full h-full bg-gray-200 rounded-2xl border-2 border-gray-400"></button>
         </div>
-        <div className="flex flex-1 flex-col gap-2">
-          <Card.Header className="gap-5">
+        <div className="flex flex-1 flex-col gap-0">
+          <Card.Header className="">
             <Card.Title>
               <Input
                 fullWidth
@@ -77,6 +116,7 @@ export default function Dashboard() {
                 onChange={handleChange}
               />
             </Card.Title>
+              <p className="text-danger text-sm h-10">{errorMsg.title}</p>
             <Card.Description>
               <TextArea
                 fullWidth
@@ -86,6 +126,7 @@ export default function Dashboard() {
                 onChange={handleChange}
               />
             </Card.Description>
+              <p className="text-danger text-sm h-10">{errorMsg.description}</p>
           </Card.Header>
           <Card.Footer className=" flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-2">
@@ -98,10 +139,13 @@ export default function Dashboard() {
                 </TimeField.Group>
               </TimeField>
               <DatePickerComponent onChange={setDate} />
+              <p className="text-danger text-sm h-10">{errorMsg.time}</p>
+              <p className="text-danger text-sm h-10">{errorMsg.date}</p>
+
             </div>
           </Card.Footer>
         </div>
-        <Button onClick={()=>{validateDataAddEvent(event)}}>Agregar evento</Button>
+        <Button onClick={handleOnClick}>Agregar evento</Button>
       </Card>
     </div>
   );
@@ -150,54 +194,64 @@ function DatePickerComponent({ onChange }) {
   );
 }
 
-import z from "zod"
+import z from "zod";
 
-export function validateDataAddEvent(dataEvent){
+export function validateDataAddEvent(dataEvent) {
   const dataEventFormated = dataEvent;
-  const today = new Date()  
-  const date = new Date(dataEvent.date.year, dataEvent.date.month-1, dataEvent.date.day)
-  let dateFormated = ""
-  let time = ""
-  
+  const today = new Date();
+  const date = new Date(
+    dataEvent.date.year,
+    dataEvent.date.month - 1,
+    dataEvent.date.day
+  );
+  let dateFormated = "";
+  let time = "";
+
   // Comprobamos que la fecha sea mayor que "hoy"
-  if(today > date) return {error:[{path: ["date"],message: "La fecha que seleccionó ya pasó."}]}
+  if (today > date )
+    return {
+      error: [{ path: ["date"], message: "La fecha que seleccionó ya pasó." }],
+    };
 
-  if(date.getDay() < 10) dateFormated = `0${date.getDay()}/`
-  else dateFormated = `${date.getDay()}/`
-  
-  if(date.getMonth() < 10) dateFormated = dateFormated + `0${date.getMonth()}/`
-  else dateFormated = dateFormated + `${date.getMonth()}/`
+  if (date.getDay() < 10) dateFormated = `0${date.getDay()}/`;
+  else dateFormated = `${date.getDay()}/`;
 
-  dateFormated = dateFormated + `${date.getFullYear()}`
-  dataEventFormated.date = dateFormated
+  if (date.getMonth() < 10)
+    dateFormated = dateFormated + `0${date.getMonth()}/`;
+  else dateFormated = dateFormated + `${date.getMonth()}/`;
+
+  dateFormated = dateFormated + `${date.getFullYear()}`;
+  dataEventFormated.date = dateFormated;
 
   // Comprobamos que se haya seleccionado una hora
-  if(!dataEvent.time) return {error:[{path: ["time"],message: "Especifique la hora"}]}
+  if (!dataEvent.time)
+    return { error: [{ path: ["time"], message: "Especifique la hora" }] };
 
   // Formateo de hora seleccionada
-  if(dataEvent.time.hour < 10) time = `0${dataEvent.time.hour}:`
-  else time = `${dataEvent.time.hour}:`
+  if (dataEvent.time.hour < 10) time = `0${dataEvent.time.hour}:`;
+  else time = `${dataEvent.time.hour}:`;
 
-  if(dataEvent.time.minute < 10) time = time + `0${dataEvent.time.minute}`
-  else time = time + dataEvent.time.minute
+  if (dataEvent.time.minute < 10) time = time + `0${dataEvent.time.minute}`;
+  else time = time + dataEvent.time.minute;
 
-  dataEventFormated.time = time
-  
+  dataEventFormated.time = time;
+
   const Event = z.object({
-    title: z.string().min(5,"El titulo debe tener al menos 5 caracteres."),
-    description: z.string().min(10,"La descripción debe tener al menos 10 caracteres."),
+    title: z.string().min(5, "El titulo debe tener al menos 5 caracteres."),
+    description: z
+      .string()
+      .min(10, "La descripción debe tener al menos 10 caracteres."),
     time: z.string(),
-    date: z.string()
-  })
+    date: z.string(),
+  });
 
-  const {success, error, data} = Event.safeParse(dataEventFormated)
+  const { success, error, data } = Event.safeParse(dataEventFormated);
 
-  if(!success){
+  if (!success) {
     console.log(error.issues);
-    return {error: error.issues}    
+    return { error: error.issues };
   }
   console.log(data);
-  
-  return {data, error: null}
-  
+
+  return { data, error: null };
 }
