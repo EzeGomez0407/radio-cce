@@ -14,7 +14,7 @@ export default async function Events() {
   console.log(events);
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-8">
       {events.map((event) => (
         <Card
           key={event.id}
@@ -49,6 +49,6 @@ export default async function Events() {
           </div>
         </Card>
       ))}
-    </>
+    </div>
   );
 }
