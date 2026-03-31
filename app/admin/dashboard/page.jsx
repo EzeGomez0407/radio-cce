@@ -11,6 +11,16 @@ import {
   Button,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
+import ImageUploader from "../../../components/ImagePicker";
+
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
@@ -28,6 +38,7 @@ export default function Dashboard() {
   });
   const [time, setTime] = useState({});
   const [date, setDate] = useState({});
+  const [img, setImage] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,9 +71,15 @@ export default function Dashboard() {
     }
 
     try {
+      const base64Image = await fileToBase64(img)
+      
       const res = await fetch("/api/events/post",{
         method: "POST",
-        body: JSON.stringify({type: "semanal", data}),
+        body: JSON.stringify({
+          type: "semanal",
+          data,
+          image: base64Image
+        }),
         headers: {
           "Content-Type": "application/json"
         }
@@ -103,7 +120,7 @@ export default function Dashboard() {
     <div className="w-full">
       <Card className="w-full items-stretch md:flex-row">
         <div className=" rounded-2xl h-65 w-100">
-          <button className="w-full h-full bg-gray-200 rounded-2xl border-2 border-gray-400"></button>
+          <ImageUploader setImg={setImage}/>
         </div>
         <div className="flex flex-1 flex-col gap-0">
           <Card.Header className="">

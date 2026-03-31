@@ -28,7 +28,7 @@ export default async function Events() {
               alt="Cherries"
               className="h-full w-full object-cover "
               loading="lazy"
-              src="https://radio-cce.onrender.com/bg-welcome.jpg"
+              src={event.data.image ? event.data.image : "https://radio-cce.onrender.com/bg-welcome.jpg"}
             />
           </div>
           <div className="flex flex-1 flex-col gap-3">
@@ -41,9 +41,9 @@ export default async function Events() {
             <Card.Footer className=" flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-foreground">
-                  {event.data.hour}
+                  {event.data?.time}
                 </span>
-                <span className="text-xs text-muted">{event.data.day}</span>
+                <span className="text-xs text-muted">{event.data?.date}</span>
               </div>
             </Card.Footer>
           </div>
