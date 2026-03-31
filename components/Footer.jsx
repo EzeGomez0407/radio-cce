@@ -57,7 +57,7 @@ export default function Footer() {
             reservados.
           </p>
           <Link
-            href={"/admin/login"}
+            href={"/login"}
             className="mt-6 text-base text-black/60"
           >
             Soy administrador

@@ -10,9 +10,12 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const onSubmit = (e) => {
+    const router = useRouter()
+
+    const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {};
@@ -22,7 +25,22 @@ export default function Login() {
       data[key] = value.toString();
     });
 
-    alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+      });
+      console.log(res);
+      
+      if(res.ok)router.push("/admin/dashboard")
+
+    } catch (error) {
+
+        alert(error);
+    }
   };
 
   return (
@@ -42,7 +60,7 @@ export default function Login() {
         >
           <Label className="text-lg">Email</Label>
           <Input placeholder="john@example.com" className="text-xl" />
-          <FieldError className="text-[16px]"/>
+          <FieldError className="text-[16px]" />
         </TextField>
 
         <TextField
@@ -69,7 +87,7 @@ export default function Login() {
           <Description className="text-[17px]">
             Debe tener al menos 8 caracteres con 1 mayúscula y 1 número
           </Description>
-          <FieldError className="text-[16px]"/>
+          <FieldError className="text-[16px]" />
         </TextField>
 
         <div className="flex gap-2">
