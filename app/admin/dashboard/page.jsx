@@ -13,6 +13,33 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
+  const [event, setEvent] = useState({
+    title: "",
+    description: "",
+    time: "",
+    date: "",
+  });
+  const [time, setTime] = useState({});
+  const [date, setDate] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    console.log(name, ": ", value);
+    setEvent((event) => ({
+      ...event,
+      [name]: value,
+    }));
+  };
+  useEffect(() => {
+    setEvent((event) => ({
+      ...event,
+      time: `${time.hour}:${time.minute}`,
+      date: `${date.day}/${date.month}/${date.year}`,
+    }));
+
+    console.log(event);
+  }, [time, date]);
 
   useEffect(() => {
     setMounted(true);
@@ -35,6 +62,8 @@ export default function Dashboard() {
                 fullWidth
                 placeholder="Título del evento"
                 className="border-1 border-blue-50 text-2xl py-1"
+                name="title"
+                onChange={handleChange}
               />
             </Card.Title>
             <Card.Description>
@@ -42,12 +71,14 @@ export default function Dashboard() {
                 fullWidth
                 placeholder="Añade una descripción al evento..."
                 className="border-1 border-blue-50 h-25"
+                name="description"
+                onChange={handleChange}
               />
             </Card.Description>
           </Card.Header>
           <Card.Footer className=" flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-2">
-              <TimeField className="w-[256px]" name="time">
+              <TimeField className="w-[256px]" name="time" onChange={setTime}>
                 <Label>Hora</Label>
                 <TimeField.Group>
                   <TimeField.Input>
@@ -55,7 +86,7 @@ export default function Dashboard() {
                   </TimeField.Input>
                 </TimeField.Group>
               </TimeField>
-              <DatePickerComponent />
+              <DatePickerComponent onChange={setDate} />
             </div>
           </Card.Footer>
         </div>
@@ -64,12 +95,12 @@ export default function Dashboard() {
   );
 }
 
-function DatePickerComponent() {
+function DatePickerComponent({ onChange }) {
   return (
-    <DatePicker className="w-64" name="date">
+    <DatePicker onChange={onChange} className="w-64" name="date">
       <Label>Fecha</Label>
       <DateField.Group fullWidth>
-        <DateField.Input>
+        <DateField.Input on="true">
           {(segment) => <DateField.Segment segment={segment} />}
         </DateField.Input>
         <DateField.Suffix>
