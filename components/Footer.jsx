@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <>
-      <footer className="border-t border-primary/20 bg-background-light py-8 text-center dark:bg-background-dark/50 pb-[120px] w-[85%]">
+      <footer className="border-t border-primary/20 bg-background-light py-8 text-center dark:bg-background-dark/50 pb-30 w-[85%]">
         <div className="mx-auto max-w-5xl px-4 mb-15">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex flex-wrap items-center justify-center gap-6">
@@ -57,7 +57,7 @@ export default function Footer() {
             reservados.
           </p>
           <Link
-            href={"/admin/dashboard"}
+            href={"/admin/login"}
             className="mt-6 text-base text-black/60"
           >
             Soy administrador
