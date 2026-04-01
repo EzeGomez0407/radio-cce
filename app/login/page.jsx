@@ -11,21 +11,24 @@ import {
   TextField,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
     const router = useRouter()
+    const [msg, setMsg] = useState("")
+    const [viewPass, setViewPass] = useState(false)
 
     const onSubmit = async (e) => {
     e.preventDefault();
+    setMsg("")
     const formData = new FormData(e.currentTarget);
-    const data = {};
+    const data = {}
 
     // Convert FormData to plain object
     formData.forEach((value, key) => {
       data[key] = value.toString();
     });
 
-    try {
       const res = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify(data),
@@ -33,14 +36,11 @@ export default function Login() {
             "Content-Type": "application/json"
         }
       });
-      console.log(res);
+      const json = await res.json()
       
-      if(res.ok)router.push("/admin/dashboard")
-
-    } catch (error) {
-
-        alert(error);
-    }
+      if(res.ok)return router.push("/admin/dashboard")
+        console.error(json);
+      setMsg(json.message)
   };
 
   return (
@@ -64,10 +64,11 @@ export default function Login() {
         </TextField>
 
         <TextField
+        className="relative"
           isRequired
           minLength={8}
           name="password"
-          type="password"
+          type={viewPass ? "text": "password"}
           validate={(value) => {
             if (value.length < 8) {
               return "La contraseña debe tener al menos 8 caracteres";
@@ -84,12 +85,16 @@ export default function Login() {
         >
           <Label className="text-lg">Password</Label>
           <Input placeholder="Ingresa la contraseña" className="text-xl" />
+          <button className="absolute right-3 top-10 text-xl bg-gray-300 p-0.5 rounded-2xl hover:text-2xl" onClick={()=>(setViewPass(!viewPass))}>👀</button>
           <Description className="text-[17px]">
             Debe tener al menos 8 caracteres con 1 mayúscula y 1 número
           </Description>
           <FieldError className="text-[16px]" />
         </TextField>
-
+        
+        <div>
+            <p className="text-danger text-lg">{msg}</p>
+          </div>
         <div className="flex gap-2">
           <Button type="submit">
             <Check />
