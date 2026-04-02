@@ -27,12 +27,12 @@ export default function NavBar() {
             >
               Eventos
             </Link>
-            <Link
+            {/* <Link
               className="text-white hover:text-[#707070] font-medium transition-colors hover:text-primary"
               href="church"
             >
               Contacto
-            </Link>
+            </Link> */}
           </div>
         </nav>
       </header>

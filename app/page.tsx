@@ -92,7 +92,9 @@ export default function Home() {
         </h2>
         <div className="overflow-hidden rounded-lg border border-primary/20 bg-background-light dark:bg-background-dark/50">
           <div className="flex flex-col items-stretch lg:flex-row">
-            <div className="w-full bg-cover bg-center lg:w-1/2"></div>
+            <div className="w-full bg-cover bg-center lg:w-1/2 flex items-center justify-center overflow-hidden">
+            <img src={"https://res.cloudinary.com/djqttard2/image/upload/q_auto/f_auto/v1775087593/Gemini_Generated_Image_mkv5zdmkv5zdmkv5_qaqy2o.png"} alt="imagen de una flor" className="scale-150"/>
+            </div>
             <div className="flex w-full flex-col justify-center gap-4 p-8 lg:w-1/2">
               <p className="text-2xl font-bold">
                 El Amor Incondicional de Dios
@@ -101,11 +103,6 @@ export default function Home() {
                 Descubre el poder transformador del amor de Dios en tu vida. Un
                 mensaje de esperanza y renovación para todos.
               </p>
-              <div className="mt-2 border-gray-900 border w-fit rounded-full">
-                <button className="flex h-10 min-w-21 max-w-120 cursor-pointer items-center justify-center overflow-hidden bg-primary px-6 text-base font-bold text-[#242424] transition-opacity hover:opacity-80 ">
-                  <span className="truncate">Leer Más</span>
-                </button>
-              </div>
             </div>
           </div>
         </div>

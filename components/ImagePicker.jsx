@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button, Card } from "@heroui/react";
+import {
+  //  Button,
+   Card } from "@heroui/react";
 
 export default function AdminImageUploader({setImg}) {
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles?.length > 0) {
@@ -18,7 +20,7 @@ export default function AdminImageUploader({setImg}) {
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
     accept: { 'image/jpeg': [], 'image/png': [], 'image/webp': [] }, // Solo imágenes seguras
-    maxSize: 80 * 1024 * 1024, // Límite estricto de 2MB
+    maxSize: 80 * 1024 * 1024, // Límite estricto de 80MB
     multiple: false
   });
 
@@ -32,6 +34,7 @@ export default function AdminImageUploader({setImg}) {
 
   useEffect(() => {
     // Cuando el componente se destruye, liberamos la memoria de la URL
+    setImg(file)
     return () => {
       if (file) URL.revokeObjectURL(file.preview);
     };
@@ -58,7 +61,7 @@ export default function AdminImageUploader({setImg}) {
             <p className="text-default-500 text-center text-sm">
               {isDragActive 
                 ? "Suelta la imagen aquí..." 
-                : "Arrastra una imagen o haz clic para explorar"}
+                : "Arrastra una imagen o haz clic para elegir una"}
             </p>
           )}
         </div>
@@ -70,7 +73,7 @@ export default function AdminImageUploader({setImg}) {
           El archivo es inválido o supera los 2MB permitidos.
         </p>
       )}
-
+{/* 
       {file && (
         <Button 
           color="primary" 
@@ -79,7 +82,7 @@ export default function AdminImageUploader({setImg}) {
         >
           Guardar Evento
         </Button>
-      )}
+      )} */}
     </div>
   );
 }

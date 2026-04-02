@@ -118,8 +118,8 @@ export default function Dashboard() {
   }
   return (
     <div className="w-full">
-      <Card className="w-full items-stretch md:flex-row">
-        <div className=" rounded-2xl h-65 w-100">
+      <Card className="w-full items-stretch md:flex-row relative">
+        <div className=" rounded-2xl h-65">
           <ImageUploader setImg={setImage}/>
         </div>
         <div className="flex flex-1 flex-col gap-0">
@@ -162,7 +162,7 @@ export default function Dashboard() {
             </div>
           </Card.Footer>
         </div>
-        <Button onClick={handleOnClick}>Agregar evento</Button>
+        <Button onClick={handleOnClick} className="absolute bottom-10 right-10 w-65" >Agregar evento</Button>
       </Card>
     </div>
   );
