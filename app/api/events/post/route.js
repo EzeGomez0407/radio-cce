@@ -5,8 +5,9 @@ import { supabase } from "@/lib/supabase"; // Importamos el cliente que creamos
 export async function POST(request) {
   try {
   const body = await request.json();
-
   const {image, data, type} = body
+  
+  if(!image) return NextResponse.json({ message: "Debe enviar una imagen" }, { status: 400 });
   
   const {secure_url} = await cloudinaryService(image); 
     
@@ -15,10 +16,12 @@ export async function POST(request) {
     .insert([{ type, data: {...data, image: secure_url} }])
     .select(); // El .select() devuelve el objeto creado
 
-    return NextResponse.json(dataResponse, { status: 201 });
+    return NextResponse.json("dataResponse", { status: 201 });
 
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.log(error);
+    
+    return NextResponse.json({ message: "Error de servidor", error }, { status: 400 });
   }
 }
 
