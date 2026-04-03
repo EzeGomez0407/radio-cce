@@ -26,6 +26,25 @@ const fileToBase64 = (file) => {
   });
 };
 
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "eventos_preset"); // El nombre que pusiste en el paso anterior
+  formData.append("cloud_name", process.env.CLOUDINARY_NAME);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/djqttard2/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await res.json();
+  if(!res.ok) return {data, error: "hubo un error con la carga de imagen"}
+  return{ data: data.secure_url, error: undefined}; // Esta es la URL que guardarás en tu DB
+};
+
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
   const [errorMsg, setErrorMsg] = useState({
@@ -76,6 +95,12 @@ export default function Dashboard() {
     setLoading(true);
     let base64Image = "";
     if (img) base64Image = await fileToBase64(img);
+
+    const {data: urlImg, error: urlImgError} = await uploadImageToCloudinary(base64Image)
+    if(urlImgError){
+      console.log(urlImgError);
+      return setErrorMsg(e=>({...e, date: urlImgError.error}))
+    }
     const res = await fetch("/api/events/post", {
       method: "POST",
       body: JSON.stringify({
@@ -83,7 +108,7 @@ export default function Dashboard() {
           ? type
           : "semanal",
         data,
-        image: base64Image,
+        image: urlImg,
       }),
       headers: {
         "Content-Type": "application/json",

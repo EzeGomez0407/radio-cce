@@ -9,14 +9,14 @@ export async function POST(request) {
   
   if(!image) return NextResponse.json({ message: "Debe enviar una imagen" }, { status: 400 });
   
-  const {secure_url} = await cloudinaryService(image); 
+  // const {secure_url} = await cloudinaryService(image); 
     
   const { data: dataResponse } = await supabase
     .from("events")
-    .insert([{ type, data: {...data, image: secure_url} }])
+    .insert([{ type, data: {...data, image} }])
     .select(); // El .select() devuelve el objeto creado
 
-    return NextResponse.json("dataResponse", { status: 201 });
+    return NextResponse.json(dataResponse, { status: 201 });
 
   } catch (error) {
     console.log(error);
