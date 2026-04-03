@@ -52,7 +52,7 @@ export default function Dashboard() {
       title: " ",
       description: " ",
       time: " ",
-      date: " ",
+      date: " "
     });
     setEvent((event) => ({
       ...event,
@@ -79,9 +79,7 @@ export default function Dashboard() {
     const res = await fetch("/api/events/post", {
       method: "POST",
       body: JSON.stringify({
-        type: ["semanal", "especial"].some(
-          (t) => t == "semanal" || t == "especial"
-        )
+        type: ["semanal", "especial"].includes(type)
           ? type
           : "semanal",
         data,
