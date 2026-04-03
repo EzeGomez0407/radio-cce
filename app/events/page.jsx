@@ -2,25 +2,17 @@ import { Alert, Card, Chip, Tabs } from "@heroui/react";
 import { supabase } from "../../lib/supabase";
 
 export default async function Events() {
-  let errorMsg = "";
-  const { data: weeklyEvents, errorWeekly } = await supabase
+  const { data: weeklyEvents } = await supabase
     .from("events")
     .select("*")
     .eq("type", "semanal")
     .order("created_at", { ascending: true });
 
-  if (errorWeekly) {
-    errorMsg = "Hubo un error al cargar los datos";
-  } 
-    const { data: specialEvents, error } = await supabase
+    const { data: specialEvents } = await supabase
       .from("events")
       .select("*")
       .eq("type", "especial")
       .order("created_at", { ascending: true });
-
-    if (error) {
-      errorMsg = "Hubo un error al cargar los datos";
-    }
 
   return (
     <Tabs className="w-full ">
