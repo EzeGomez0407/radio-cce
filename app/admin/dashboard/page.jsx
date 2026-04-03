@@ -52,7 +52,7 @@ export default function Dashboard() {
       title: " ",
       description: " ",
       time: " ",
-      date: " ",
+      date: " "
     });
     setEvent((event) => ({
       ...event,

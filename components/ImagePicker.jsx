@@ -19,7 +19,11 @@ export default function AdminImageUploader({setImg}) {
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
-    accept: { 'image/jpeg': [], 'image/png': [], 'image/webp': [] }, // Solo imágenes seguras
+    accept: { 'image/jpeg': ['.jpeg', '.jpg', '.JPG'], 
+    'image/png': ['.png'], 
+    'image/webp': ['.webp'],
+    'image/heic': ['.heic'], // Formato común en móviles
+    'image/heif': ['.heif'] }, // Solo imágenes seguras
     maxSize: 80 * 1024 * 1024, // Límite estricto de 80MB
     multiple: false
   });
@@ -67,10 +71,10 @@ export default function AdminImageUploader({setImg}) {
         </div>
       </Card>
 
-      {/* Alerta si pesa más de 2MB o no es formato válido */}
+      {/* Alerta si pesa más de 80MB o no es formato válido */}
       {fileRejections.length > 0 && (
         <p className="text-danger text-tiny font-medium">
-          El archivo es inválido o supera los 2MB permitidos.
+          El archivo es inválido o supera los 80MB permitidos.
         </p>
       )}
 {/* 
