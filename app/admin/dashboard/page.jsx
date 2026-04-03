@@ -9,6 +9,10 @@ import {
   DateField,
   DatePicker,
   Button,
+  Description,
+  ListBox,
+  Select,
+  toast,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 import ImageUploader from "../../../components/ImagePicker";
@@ -36,19 +40,20 @@ export default function Dashboard() {
     time: "",
     date: "",
   });
-  const [time, setTime] = useState({});
-  const [date, setDate] = useState({});
-  const [img, setImage] = useState("")
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
+  const [img, setImage] = useState("");
+  const [type, setType] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setErrorMsg(({
+    setErrorMsg({
       title: " ",
       description: " ",
       time: " ",
       date: " ",
-    }))
-    console.log(name, ": ", value);
+    });
     setEvent((event) => ({
       ...event,
       [name]: value,
@@ -57,7 +62,6 @@ export default function Dashboard() {
 
   const handleOnClick = async (e) => {
     e.preventDefault();
-
     const { data, error } = validateDataAddEvent(event);
 
     if (error) {
@@ -67,36 +71,56 @@ export default function Dashboard() {
           [error[i].path[0]]: error[i].message,
         }));
       }
-      return
+      return;
+    }
+    setLoading(true);
+    let base64Image = "";
+    if (img) base64Image = await fileToBase64(img);
+    const res = await fetch("/api/events/post", {
+      method: "POST",
+      body: JSON.stringify({
+        type: ["semanal", "especial"].some(
+          (t) => t == "semanal" || t == "especial"
+        )
+          ? type
+          : "semanal",
+        data,
+        image: base64Image,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    setLoading(false);
+    const json = await res.json();
+    if (!res.ok) {
+      return toastError(json.message);
     }
 
-    try {
-      const base64Image = await fileToBase64(img)
-      
-      const res = await fetch("/api/events/post",{
-        method: "POST",
-        body: JSON.stringify({
-          type: "semanal",
-          data,
-          image: base64Image
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-      
-    }
+    setErrorMsg({
+      title: " ",
+      description: " ",
+      time: " ",
+      date: " ",
+    });
+    setEvent({
+      title: "",
+      description: "",
+      time: "",
+      date: "",
+    });
+    setTime("");
+    setDate("");
+    setImage("");
+    setType("");
+    return toastSucces();
   };
+
   useEffect(() => {
     setEvent((event) => ({
       ...event,
       time: time,
     }));
-
-    console.log(event);
   }, [time]);
 
   useEffect(() => {
@@ -104,8 +128,6 @@ export default function Dashboard() {
       ...event,
       date: date,
     }));
-
-    console.log(event);
   }, [date]);
 
   useEffect(() => {
@@ -117,10 +139,10 @@ export default function Dashboard() {
     return null;
   }
   return (
-    <div className="w-full">
+    <div className="flex flex-col items-center w-full relative pb-14 overflow-hidden ">
       <Card className="w-full items-stretch md:flex-row relative">
         <div className=" rounded-2xl h-65">
-          <ImageUploader setImg={setImage}/>
+          <ImageUploader setImg={setImage} reset={(callback)=>callback()}/>
         </div>
         <div className="flex flex-1 flex-col gap-0">
           <Card.Header className="">
@@ -131,9 +153,10 @@ export default function Dashboard() {
                 className="border border-blue-50 text-2xl py-1"
                 name="title"
                 onChange={handleChange}
+                value={event.title}
               />
             </Card.Title>
-              <p className="text-danger text-sm h-10">{errorMsg.title}</p>
+            <p className="text-danger text-sm h-10">{errorMsg.title}</p>
             <Card.Description>
               <TextArea
                 fullWidth
@@ -141,13 +164,14 @@ export default function Dashboard() {
                 className="border border-blue-50 h-25"
                 name="description"
                 onChange={handleChange}
+                value={event.description}
               />
             </Card.Description>
-              <p className="text-danger text-sm h-10">{errorMsg.description}</p>
+            <p className="text-danger text-sm h-10">{errorMsg.description}</p>
           </Card.Header>
           <Card.Footer className=" flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-col gap-2">
-              <TimeField className="w-[256px]" name="time" onChange={setTime}>
+            <div className="flex flex-col mb-3">
+              <TimeField className="w-[256px]" name="time" onChange={setTime} value={time}>
                 <Label>Hora</Label>
                 <TimeField.Group>
                   <TimeField.Input>
@@ -155,22 +179,28 @@ export default function Dashboard() {
                   </TimeField.Input>
                 </TimeField.Group>
               </TimeField>
-              <DatePickerComponent onChange={setDate} />
               <p className="text-danger text-sm h-10">{errorMsg.time}</p>
+              <DatePickerComponent onChange={setDate} />
               <p className="text-danger text-sm h-10">{errorMsg.date}</p>
-
+              <SelectType setValue={setType} />
             </div>
           </Card.Footer>
+          <Button
+            onClick={handleOnClick}
+            className=" h-12 w-75 "
+            style={{ fontSize: 18 }}
+          >
+            {!loading ? "Agregar evento" : <LoadingProgressBar />}
+          </Button>
         </div>
-        <Button onClick={handleOnClick} className="absolute bottom-10 right-10 w-65" >Agregar evento</Button>
       </Card>
     </div>
   );
 }
 
-function DatePickerComponent({ onChange }) {
+function DatePickerComponent({ onChange, ...prop }) {
   return (
-    <DatePicker onChange={onChange} className="w-64" name="date">
+    <DatePicker onChange={onChange} className="w-64" name="date" {...prop}>
       <Label>Fecha</Label>
       <DateField.Group fullWidth>
         <DateField.Input on="true">
@@ -214,44 +244,54 @@ function DatePickerComponent({ onChange }) {
 import z from "zod";
 
 export function validateDataAddEvent(dataEvent) {
+  const timeIsString = typeof dataEvent.time == "string";
+  const dateIsString =
+    typeof dataEvent.date == "string" || dataEvent.date == null;
   const dataEventFormated = dataEvent;
   const today = new Date();
-  const date = new Date(
-    dataEvent.date.year,
-    dataEvent.date.month - 1,
-    dataEvent.date.day
-  );
-  let dateFormated = "";
+  let dateFormated = dataEvent.date == null ? "" : dataEvent.date;
+  let date;
   let time = "";
 
-  // Comprobamos que la fecha sea mayor que "hoy"
-  if (today > date )
-    return {
-      error: [{ path: ["date"], message: "La fecha que seleccionó ya pasó." }],
-    };
+  if (dataEvent.date && !dateIsString) {
+    date = new Date(
+      dataEvent.date.year,
+      dataEvent.date.month - 1,
+      dataEvent.date.day
+    );
+    // Comprobamos que la fecha sea mayor que "hoy"
+    if (today > date)
+      return {
+        error: [
+          { path: ["date"], message: "La fecha que seleccionó ya pasó." },
+        ],
+      };
 
-  if (date.getDay() < 10) dateFormated = `0${date.getDay()}/`;
-  else dateFormated = `${date.getDay()}/`;
+    if (date.getDay() < 10) dateFormated = `0${date.getDay()}/`;
+    else dateFormated = `${date.getDay()}/`;
 
-  if (date.getMonth() < 10)
-    dateFormated = dateFormated + `0${date.getMonth()}/`;
-  else dateFormated = dateFormated + `${date.getMonth()}/`;
+    if (date.getMonth() < 10)
+      dateFormated = dateFormated + `0${date.getMonth()}/`;
+    else dateFormated = dateFormated + `${date.getMonth()}/`;
 
-  dateFormated = dateFormated + `${date.getFullYear()}`;
-  dataEventFormated.date = dateFormated;
+    dateFormated = dateFormated + `${date.getFullYear()}`;
+    dataEventFormated.date = dateFormated;
+  } else dataEventFormated.date = dateFormated;
 
   // Comprobamos que se haya seleccionado una hora
   if (!dataEvent.time)
     return { error: [{ path: ["time"], message: "Especifique la hora" }] };
 
-  // Formateo de hora seleccionada
-  if (dataEvent.time.hour < 10) time = `0${dataEvent.time.hour}:`;
-  else time = `${dataEvent.time.hour}:`;
+  // Formateo de hora seleccionada solo si no es un string
+  if (!timeIsString) {
+    if (dataEvent.time.hour < 10) time = `0${dataEvent.time.hour}:`;
+    else time = `${dataEvent.time.hour}:`;
 
-  if (dataEvent.time.minute < 10) time = time + `0${dataEvent.time.minute}`;
-  else time = time + dataEvent.time.minute;
+    if (dataEvent.time.minute < 10) time = time + `0${dataEvent.time.minute}`;
+    else time = time + dataEvent.time.minute;
 
-  dataEventFormated.time = time;
+    dataEventFormated.time = time;
+  }
 
   const Event = z.object({
     title: z.string().min(5, "El titulo debe tener al menos 5 caracteres."),
@@ -268,7 +308,69 @@ export function validateDataAddEvent(dataEvent) {
     console.log(error.issues);
     return { error: error.issues };
   }
-  console.log(data);
 
   return { data, error: null };
+}
+
+export function SelectType({ setValue }) {
+  return (
+    <Select
+      className="w-[256px]"
+      placeholder="Semanal por defecto"
+      onChange={setValue}
+    >
+      <Label>Tipo de evento</Label>
+      <Select.Trigger>
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover>
+        <ListBox>
+          <ListBox.Item id="semanal" textValue="Semanal">
+            Semanal
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="especial" textValue="Especial">
+            Especial
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+        </ListBox>
+      </Select.Popover>
+      <Description className="text-sm">
+        Los eventos <b>semanales</b> se repiten todas las semanas, los{" "}
+        <b>especiales</b> son eventos de festejos que se hacen pocas veces al
+        año.
+      </Description>
+    </Select>
+  );
+}
+
+import { ProgressBar } from "@heroui/react";
+import { HardDrive } from "@gravity-ui/icons";
+
+export function LoadingProgressBar() {
+  return (
+    <ProgressBar isIndeterminate aria-label="Loading" className="w-64">
+      <Label>Loading...</Label>
+      <ProgressBar.Track>
+        <ProgressBar.Fill />
+      </ProgressBar.Track>
+    </ProgressBar>
+  );
+}
+
+function toastError(msg) {
+  return toast.danger("Error", {
+    actionProps: { variant: "danger" },
+    description: msg,
+    indicator: <HardDrive />,
+  });
+}
+function toastSucces(msg) {
+  return toast.success("Bien!", {
+    actionProps: {
+      className: "bg-success text-success-foreground",
+    },
+    description: "Se agrego el evento con éxito",
+  });
 }

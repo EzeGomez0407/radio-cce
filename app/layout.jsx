@@ -3,6 +3,7 @@ import "./globals.css";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import RadioPlayer from "../components/RadioPlayer";
+import { Toast } from "@heroui/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/logo.png" sizes="any" />
       </head>
       <body className="min-h-full flex flex-col">
+      <Toast.Provider />
         <NavBar />
         <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
           <div className="flex h-full grow flex-col">
