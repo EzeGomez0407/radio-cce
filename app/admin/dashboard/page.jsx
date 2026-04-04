@@ -71,7 +71,8 @@ export default function Dashboard() {
       title: " ",
       description: " ",
       time: " ",
-      date: " "
+      date: " ",
+      img: " "
     });
     setEvent((event) => ({
       ...event,
@@ -81,6 +82,7 @@ export default function Dashboard() {
 
   const handleOnClick = async (e) => {
     e.preventDefault();
+    if(!img) return setErrorMsg(e=>({...e, img: "Debe ingresar una imagen al evento"}))
     const { data, error } = validateDataAddEvent(event);
 
     if (error) {
@@ -166,6 +168,7 @@ export default function Dashboard() {
       <Card className="w-full items-stretch md:flex-row relative">
         <div className=" rounded-2xl h-65">
           <ImageUploader setImg={setImage} reset={(callback)=>callback()}/>
+          <p className="text-danger text-sm h-10">{errorMsg.img}</p>
         </div>
         <div className="flex flex-1 flex-col gap-0">
           <Card.Header className="">
