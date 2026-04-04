@@ -12,18 +12,20 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import LoadingProgressBar from "../../components/LoadingToBtn";
 
 export default function Login() {
     const router = useRouter()
     const [msg, setMsg] = useState("")
     const [viewPass, setViewPass] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     setMsg("")
     const formData = new FormData(e.currentTarget);
     const data = {}
-
     // Convert FormData to plain object
     formData.forEach((value, key) => {
       data[key] = value.toString();
@@ -37,11 +39,16 @@ export default function Login() {
         }
       });
       const json = await res.json()
-      
+      setLoading(false)
       if(res.ok)return router.push("/admin/dashboard")
-        console.error(json);
+      console.error(json);
       setMsg(json.message)
   };
+
+  const onClickShowPass = (e)=>{
+    e.preventDefault()
+    setViewPass(!viewPass)
+  }
 
   return (
     <div className="flex flex-col justify-center h-full items-center mt-10">
@@ -85,7 +92,7 @@ export default function Login() {
         >
           <Label className="text-lg">Password</Label>
           <Input placeholder="Ingresa la contraseña" className="text-xl" />
-          <button className="absolute right-3 top-10 text-xl bg-gray-300 p-0.5 rounded-2xl hover:text-2xl" onClick={()=>(setViewPass(!viewPass))}>👀</button>
+          <button className="absolute right-3 top-10 text-xl bg-gray-300 p-0.5 rounded-2xl hover:text-2xl" onClick={onClickShowPass}>👀</button>
           <Description className="text-[17px]">
             Debe tener al menos 8 caracteres con 1 mayúscula y 1 número
           </Description>
@@ -96,11 +103,13 @@ export default function Login() {
             <p className="text-danger text-lg">{msg}</p>
           </div>
         <div className="flex gap-2">
-          <Button type="submit">
-            <Check />
-            Ingresar
+          <Button type="submit" isDisabled={loading}>
+            {
+              loading ? <LoadingProgressBar /> : <><Check />
+            Ingresar</>
+            }
           </Button>
-          <Button type="reset" variant="secondary">
+          <Button type="reset" variant="secondary" isDisabled={loading}>
             Reiniciar
           </Button>
         </div>
