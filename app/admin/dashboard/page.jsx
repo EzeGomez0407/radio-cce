@@ -171,7 +171,7 @@ export default function Dashboard() {
           <p className="text-danger text-sm h-10">{errorMsg.img}</p>
         </div>
         <div className="flex flex-1 flex-col gap-0">
-          <Card.Header className="">
+          <Card.Header>
             <Card.Title>
               <Input
                 fullWidth
@@ -212,6 +212,7 @@ export default function Dashboard() {
             </div>
           </Card.Footer>
           <Button
+            isDisabled={loading}
             onClick={handleOnClick}
             className=" h-12 w-75 "
             style={{ fontSize: 18 }}
