@@ -60,7 +60,7 @@ export default function Home() {
             <div className="flex flex-col gap-1">
               <h3 className="text-xl font-bold">Estudio Bíblico/Discipulado</h3>
               <p className="text-base text-black/60 ">
-                Miércoles a las 7:00 PM
+                Miércoles a las 19:00 PM
               </p>
             </div>
           </div>
@@ -81,6 +81,10 @@ export default function Home() {
               <p className="text-base text-black/60 ">
                 Lunes a viernes
                 <br /> 6:30 AM
+              </p>
+              <p className="text-base text-black/60 ">
+                Martes, Jueves y Viernes
+                <br /> 19:00 PM
               </p>
             </div>
           </div>
@@ -107,6 +111,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* ---------INVITACION AL APARTADO DE EVENTOS--------- */}
+      <div className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">
+        <p className="text-2xl font-bold font-italic">Visita el apartado de Eventos para ver todas nuestras actividades</p>
+      </div>
+      {/* ------------CONTACTO------------ */}
       <section>
         <h2 className="mb-6 text-center text-3xl font-bold">
           Información de Contacto
