@@ -1,7 +1,20 @@
-import "./page.css";
-import Image from "next/image";
 
-export default function Home() {
+import CardEvents from "../components/CardEvents"
+import "./page.css";
+
+const event = {
+  id: "1",
+  type: "especial",
+  data: {
+    title: "Probando",
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis odio officia quasi? A ea quisquam ex consequuntur. Sapiente, dicta consectetur!",
+    time: "20:02",
+    date: "12/12/43",
+    image: ""
+  }
+}
+
+export default async function Home() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-12">
       <section className="@container">
@@ -91,29 +104,23 @@ export default function Home() {
         </div>
       </section>
       <section>
-        <h2 className="mb-6 text-center text-3xl font-bold">
-          Mensaje Inspirador
+        <h2 className="text-center text-3xl font-bold">
+          Últimos nuevos eventos
         </h2>
+        <div className="flex justify-center gap-2 py-5">
+          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-500 rounded-full"></span></button>
+          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-300 rounded-full"></span></button>
+          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-300 rounded-full"></span></button>
+        </div>
         <div className="overflow-hidden rounded-lg border border-primary/20 bg-background-light dark:bg-background-dark/50">
           <div className="flex flex-col items-stretch lg:flex-row">
-            <div className="w-full bg-cover bg-center lg:w-1/2 flex items-center justify-center overflow-hidden">
-            <img src={"https://res.cloudinary.com/djqttard2/image/upload/q_auto/f_auto/v1775087593/Gemini_Generated_Image_mkv5zdmkv5zdmkv5_qaqy2o.png"} alt="imagen de una flor" className="scale-150"/>
-            </div>
-            <div className="flex w-full flex-col justify-center gap-4 p-8 lg:w-1/2">
-              <p className="text-2xl font-bold">
-                El Amor Incondicional de Dios
-              </p>
-              <p className="text-base text-black/60 ">
-                Descubre el poder transformador del amor de Dios en tu vida. Un
-                mensaje de esperanza y renovación para todos.
-              </p>
-            </div>
+            <CardEvents event={event}/>
           </div>
         </div>
       </section>
       {/* ---------INVITACION AL APARTADO DE EVENTOS--------- */}
       <div className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">
-        <p className="text-2xl font-bold font-italic">Visita el apartado de Eventos para ver todas nuestras actividades</p>
+        <p className="text-2xl font-bold font-italic">Visite el apartado de Eventos para ver todas nuestras actividades</p>
       </div>
       {/* ------------CONTACTO------------ */}
       <section>
