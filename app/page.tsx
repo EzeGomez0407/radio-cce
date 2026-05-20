@@ -1,107 +1,22 @@
 
-import Carrousel from "../components/Carrousel"
 import "./page.css";
-
-const listEvent = [
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d05l1eb18e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "Y AHORA QUE?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d054aeb18e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "Y AHORA?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541ebz8e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "Y QUE?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d054beb18e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "QUE?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541e218e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "Y?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0vc-9d0541eb18e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "E?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9df541eb18e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "HO?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  },
-  {
-    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541eb11e5",
-    "created_at": "2026-04-09T14:06:05.909685+00:00",
-    "type": "semanal",
-    "data": {
-      "date": "",
-      "time": "09:30",
-      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
-      "title": "A?",
-      "description": "Seminario bíblico para los últimos bautizados "
-    }
-  }
-]
+import {supabase} from "../lib/supabase"
+import Carrousel from "../components/Carrousel"
 
 export default async function Home() {
+
+  const { data: weeklyEvents } = await supabase
+    .from("events")
+    .select("*")
+    .eq("type", "semanal")
+    .order("created_at", { ascending: true });
+
+    const { data: specialEventsDB } = await supabase
+      .from("events")
+      .select("*")
+      .eq("type", "especial")
+      .order("created_at", { ascending: true });     
+
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-12">
       <section className="@container">
@@ -192,7 +107,7 @@ export default async function Home() {
       </section>
       {/* -------CARROUSEL EVENTOS--------- */}
       <section>
-        <Carrousel elementList={listEvent} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3}/>
+        <Carrousel elementsOfDB={{specialEventsDB, weeklyEvents}} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3}/>
       </section>
       {/* ---------INVITACION AL APARTADO DE EVENTOS--------- */}
       <div className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">

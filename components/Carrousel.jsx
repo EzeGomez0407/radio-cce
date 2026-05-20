@@ -3,11 +3,13 @@ import CardEvents from "./CardEvents";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useEvents } from "../lib/store";
 
-export default function Carrousel({ elementList, quantElement, msgToEmpty }) {
-  if (!elementList && elementList.length < 1) return <p>{msgToEmpty}</p>;
+export default function Carrousel({ elementsOfDB:{specialEventsDB,weeklyEvents}, quantElement, msgToEmpty }) {
+  const {loadSpecialEvents,loadWeeklyEvents} = useEvents();
+  
   //guardar solo la cantidad de elementos que se especifique de la lista que recibimos
-  const limitedElementsList = elementList.slice(0, quantElement);
+  const limitedElementsList = specialEventsDB.slice(0, quantElement);
   const [currentElement, setCurrentElement] = useState(0);
 
   // mostrar el siguiente elemento en el carrousel
@@ -29,12 +31,16 @@ export default function Carrousel({ elementList, quantElement, msgToEmpty }) {
     return () => clearInterval(interval);
   }, [limitedElementsList.length, nextElement, currentElement]);
 
+  useEffect(()=>{
+    loadSpecialEvents(specialEventsDB)
+    loadWeeklyEvents(weeklyEvents)
+},[])
   return (
     <div className="">
       <div className="flex justify-center gap-2 py-5">
         {limitedElementsList.map((e, i) => (
           <button
-            key={e.title}
+            key={i}
             onClick={() => goToElement(i)}
             className={`flex items-center px-2 py-2 transition-colors duration-300 ${
               i === currentElement
@@ -42,9 +48,7 @@ export default function Carrousel({ elementList, quantElement, msgToEmpty }) {
                 : "bg-gray-300 hover:bg-gray-400" // Gris claro para el resto
             }`}
           >
-            <span
-              className="inline-block w-2 h-2 bg-gray-500 rounded-full"
-            ></span>
+            <span className="inline-block w-2 h-2 bg-gray-500 rounded-full"></span>
           </button>
         ))}
       </div>
@@ -54,7 +58,7 @@ export default function Carrousel({ elementList, quantElement, msgToEmpty }) {
           style={{ transform: `translateX(-${currentElement * 100}%)` }}
         >
           {limitedElementsList.map((element) => (
-              <CardEvents event={element} key={element.id}/>
+            <CardEvents event={element} key={element.id} />
           ))}
         </div>
       </div>
