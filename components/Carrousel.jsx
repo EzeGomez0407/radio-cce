@@ -1,13 +1,63 @@
-'useClient'
+"use client";
+import CardEvents from "./CardEvents";
+import { useEffect } from "react";
+import { useCallback } from "react";
+import { useState } from "react";
 
-export default function Carrousel({elementList, quantElement}){
-    const []
+export default function Carrousel({ elementList, quantElement, msgToEmpty }) {
+  if (!elementList && elementList.length < 1) return <p>{msgToEmpty}</p>;
+  //guardar solo la cantidad de elementos que se especifique de la lista que recibimos
+  const limitedElementsList = elementList.slice(0, quantElement);
+  const [currentElement, setCurrentElement] = useState(0);
 
-    return (
-        <div className="overflow-hidden rounded-lg border border-primary/20 bg-background-light dark:bg-background-dark/50">
-          <div className="flex flex-col items-stretch lg:flex-row">
-            <CardEvents event={event}/>
-          </div>
+  // mostrar el siguiente elemento en el carrousel
+  const nextElement = useCallback(() => {
+    setCurrentElement((prevElement) =>
+      prevElement === limitedElementsList.length - 1 ? 0 : prevElement + 1
+    );
+  }, [limitedElementsList.length]);
+
+  const goToElement = (index) => {
+    setCurrentElement(index);
+  };
+
+  useEffect(() => {
+    if (limitedElementsList.length <= 1) return;
+
+    const interval = setInterval(nextElement, 3500);
+
+    return () => clearInterval(interval);
+  }, [limitedElementsList.length, nextElement, currentElement]);
+
+  return (
+    <div className="">
+      <div className="flex justify-center gap-2 py-5">
+        {limitedElementsList.map((e, i) => (
+          <button
+            key={e.title}
+            onClick={() => goToElement(i)}
+            className={`flex items-center px-2 py-2 transition-colors duration-300 ${
+              i === currentElement
+                ? "bg-gray-800" // Gris oscuro para el seleccionado
+                : "bg-gray-300 hover:bg-gray-400" // Gris claro para el resto
+            }`}
+          >
+            <span
+              className="inline-block w-2 h-2 bg-gray-500 rounded-full"
+            ></span>
+          </button>
+        ))}
+      </div>
+      <div className="relative overflow-hidden">
+        <div
+          className="flex h-full transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${currentElement * 100}%)` }}
+        >
+          {limitedElementsList.map((element) => (
+              <CardEvents event={element} key={element.id}/>
+          ))}
         </div>
-    )
+      </div>
+    </div>
+  );
 }

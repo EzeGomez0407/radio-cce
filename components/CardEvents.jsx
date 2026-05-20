@@ -1,14 +1,14 @@
 import { Card, Chip } from "@heroui/react";
 
-export default function CardEvents({event}){
+export default function CardEvents({event}){  
     return <Card
           key={event.id}
-          className="relative w-full items-stretch md:flex-row"
+          className="w-full shrink-0 flex flex-col justify-center p-6 bg-white"
         >
           <Chip color={event.type == "especial" ? "success" : "warning"} className="absolute top-3 right-3 text-lg">
             {event.type}
           </Chip>
-          <div className="overflow-hidden rounded-2xl h-65">
+          <div className="overflow-hidden rounded-2xl h-75">
             <img
               alt="Cherries"
               className="h-full w-full object-cover "

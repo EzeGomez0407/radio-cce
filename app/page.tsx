@@ -1,18 +1,105 @@
 
-import CardEvents from "../components/CardEvents"
+import Carrousel from "../components/Carrousel"
 import "./page.css";
 
-const event = {
-  id: "1",
-  type: "especial",
-  data: {
-    title: "Probando",
-    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis odio officia quasi? A ea quisquam ex consequuntur. Sapiente, dicta consectetur!",
-    time: "20:02",
-    date: "12/12/43",
-    image: ""
+const listEvent = [
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d05l1eb18e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "Y AHORA QUE?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d054aeb18e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "Y AHORA?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541ebz8e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "Y QUE?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d054beb18e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "QUE?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541e218e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "Y?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0vc-9d0541eb18e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "E?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9df541eb18e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "HO?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
+  },
+  {
+    "id": "8b7f1e22-0a09-4bd3-9a0d-9d0541eb11e5",
+    "created_at": "2026-04-09T14:06:05.909685+00:00",
+    "type": "semanal",
+    "data": {
+      "date": "",
+      "time": "09:30",
+      "image": "https://res.cloudinary.com/djqttard2/image/upload/v1775743563/qufesdmizopuez8grhvd.jpg",
+      "title": "A?",
+      "description": "Seminario bíblico para los últimos bautizados "
+    }
   }
-}
+]
 
 export default async function Home() {
   return (
@@ -103,20 +190,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      {/* -------CARROUSEL EVENTOS--------- */}
       <section>
-        <h2 className="text-center text-3xl font-bold">
-          Últimos nuevos eventos
-        </h2>
-        <div className="flex justify-center gap-2 py-5">
-          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-500 rounded-full"></span></button>
-          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-300 rounded-full"></span></button>
-          <button className="flex items-center px-2 py-2"><span className="inline-block w-2 h-2 bg-gray-300 rounded-full"></span></button>
-        </div>
-        <div className="overflow-hidden rounded-lg border border-primary/20 bg-background-light dark:bg-background-dark/50">
-          <div className="flex flex-col items-stretch lg:flex-row">
-            <CardEvents event={event}/>
-          </div>
-        </div>
+        <Carrousel elementList={listEvent} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3}/>
       </section>
       {/* ---------INVITACION AL APARTADO DE EVENTOS--------- */}
       <div className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">
