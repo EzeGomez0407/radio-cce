@@ -2,6 +2,7 @@ import { Alert, Card, Chip, Tabs } from "@heroui/react";
 import { supabase } from "../../lib/supabase";
 
 export default async function Events() {
+  
   const { data: weeklyEvents } = await supabase
     .from("events")
     .select("*")
@@ -41,7 +42,7 @@ export default async function Events() {
 function EventsList({ events }) {
   return (
     <section className="flex flex-col items-center gap-8">
-      {events.length === 0 ?  <Alert status="warning">
+      {!events || events.length === 0 ?  <Alert status="warning">
         <Alert.Indicator />
         <Alert.Content>
           <Alert.Title>Aún no se cargan eventos.</Alert.Title>

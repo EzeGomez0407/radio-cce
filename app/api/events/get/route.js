@@ -3,7 +3,11 @@ import { supabase } from "@/lib/supabase"; // Importamos el cliente que creamos
 
 // GET: Listar productos
 export async function GET() {
-  const { data, error } = await supabase.from("events").select("*");
+  const { data, error } = await supabase
+  .from("events")
+  .select("*")
+  .eq("type", "especial")
+  .order("created_at", { ascending: true });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
