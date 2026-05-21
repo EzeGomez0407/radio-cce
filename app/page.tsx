@@ -1,7 +1,8 @@
 
 import "./page.css";
-import {supabase} from "../lib/supabase"
+import { supabase } from "../lib/supabase"
 import Carrousel from "../components/Carrousel"
+import Link from "next/link";
 
 export default async function Home() {
 
@@ -11,16 +12,16 @@ export default async function Home() {
     .eq("type", "semanal")
     .order("created_at", { ascending: true });
 
-    const { data: specialEventsDB } = await supabase
-      .from("events")
-      .select("*")
-      .eq("type", "especial")
-      .order("created_at", { ascending: true });     
+  const { data: specialEventsDB } = await supabase
+    .from("events")
+    .select("*")
+    .eq("type", "especial")
+    .order("created_at", { ascending: true });
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-12">
-      <section className="@container">
-        <div className="relative flex min-h-75 flex-col items-center justify-center gap-6 rounded-xl bg-cover bg-center text-center ">
+    <div className="mx-auto flex max-w-5xl flex-col gap-6">
+      <section className="@container mt-8">
+        <div className="relative flex  flex-col items-center justify-center gap-6 rounded-xl bg-cover bg-center text-center ">
           <div className="div-welcome rounded-lg">
             <div className="flex flex-col px-5 backdrop-contrast-50 backdrop-brightness-120 backdrop-blur-[2px]">
               <h1 className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl w-full h-full p-2 pt-8 text-welcome">
@@ -34,6 +35,14 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      {/* -------CARROUSEL EVENTOS--------- */}
+      <section>
+        <h2 className="text-center text-3xl font-bold">
+          Próximos Eventos
+        </h2>
+        <Carrousel elementsOfDB={{ specialEventsDB, weeklyEvents }} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3} />
+      </section>
+      {/* -------SERVICIOS------- */}
       <section>
         <h2 className="mb-6 text-center text-3xl font-bold">
           Nuestros Servicios
@@ -105,14 +114,11 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      {/* -------CARROUSEL EVENTOS--------- */}
-      <section>
-        <Carrousel elementsOfDB={{specialEventsDB, weeklyEvents}} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3}/>
-      </section>
+
       {/* ---------INVITACION AL APARTADO DE EVENTOS--------- */}
-      <div className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">
-        <p className="text-2xl font-bold font-italic">Visite el apartado de Eventos para ver todas nuestras actividades</p>
-      </div>
+        <Link href={"/events"} className="p-7 w-full bg-linear-to-r from-gray-400 to-transparent flex items-center justify-center">
+        <p className="text-2xl font-bold font-italic">Presione aquí para ver todas nuestras actividades</p>
+        </Link>
       {/* ------------CONTACTO------------ */}
       <section>
         <h2 className="mb-6 text-center text-3xl font-bold">
@@ -128,13 +134,13 @@ export default async function Home() {
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold text-primary">Teléfono</p>
-              <p className="text-base">+54 (362) 4472049</p>
+              <p className="text-base">+54 (3777) 472049</p>
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold text-primary">
                 Correo Electrónico
               </p>
-              <p className="text-base">centrocristiano@gmail.com</p>
+              <p className="text-base">centrocristianoesquina@gmail.com</p>
             </div>
           </div>
         </div>

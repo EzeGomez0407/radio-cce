@@ -6,34 +6,37 @@ export function usePlayerFM() {
   
   useEffect(() => {
     const elemAudio = document.getElementById("player-fm");
-    const btnPlayPause = document.getElementById("btn-play-pause")
-    if(!btnPlayPause || !elemAudio) return;
+    const btnPlayPause = document.getElementById("btn-play-pause");
+    if (!btnPlayPause || !elemAudio) return;
     
-    audioElemRef.current = elemAudio
-    
+    audioElemRef.current = elemAudio;
     setPlayBtn(btnPlayPause);
   }, []);
   
-  const handlePlayPause = (e,setIsLoading) => {
-    e.preventDefault()
+  const handlePlayPause = (e, isPlaying, setIsLoading) => {
+    e.preventDefault();
     if (!audioElemRef.current || !playBtn) return;
-    // Play or pause track depending on state
-    if (playBtn.dataset.playing === "false") {
-      setIsLoading(true)
-      audioElemRef.current.play()
-      
-      
+    
+    // Si NO está sonando (va a dar Play)
+    if (!isPlaying) {
+      setIsLoading(true); // Encendemos loading inmediatamente
+      audioElemRef.current.play().catch(err => {
+        console.error("Error al reproducir el streaming:", err);
+        setIsLoading(false);
+      });
       playBtn.dataset.playing = "true";
-    } else if (playBtn.dataset.playing === "true") {
+    } else {
+      // Si ya está sonando (va a dar Pausa)
       audioElemRef.current.pause();
+      setIsLoading(false); // Apagamos por las dudas
       playBtn.dataset.playing = "false";
     }
   };
 
-  const handleVolume = (e) => {
-    e.preventDefault()
-    const {value} = e.target
-    audioElemRef.current.volume = value
+  const handleVolume = (e) => {e.preventDefault();
+    if (!audioElemRef.current) return;
+    const { value } = e.target;
+    audioElemRef.current.volume = value;
   }
   return { handlePlayPause, handleVolume };
 }
