@@ -1,5 +1,6 @@
 import { Alert, Card, Chip, Tabs } from "@heroui/react";
 import { supabase } from "../../lib/supabase";
+import { EventsList } from "../../components/page_events/EventsList";
 
 export default async function Events() {
   
@@ -29,16 +30,17 @@ export default async function Events() {
           </Tabs.Tab>
         </Tabs.List>
       </Tabs.ListContainer>
-      <Tabs.Panel className="pt-4" id="semanales">
+      {/* <Tabs.Panel className="pt-4" id="semanales">
         <EventsList events={weeklyEvents} />
       </Tabs.Panel>
       <Tabs.Panel className="pt-4" id="especiales">
         <EventsList events={specialEvents} />
-      </Tabs.Panel>
+      </Tabs.Panel> */}
+      <EventsList />
     </Tabs>
   );
 }
-
+/* 
 function EventsList({ events }) {
   return (
     <section className="flex flex-col items-center gap-8">
@@ -88,3 +90,4 @@ function EventsList({ events }) {
     </section>
   );
 }
+ */
