@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import RadioPlayer from "../components/RadioPlayer";
 import { Toast } from "@heroui/react";
+import { supabase } from "../lib/supabase"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,20 @@ export const metadata = {
   description: "Página de Centro Cristiano Esquina, donde se muestran los eventos. Más Radio",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  
+  const { data: weeklyEventsDB } = await supabase
+    .from("events")
+    .select("*")
+    .eq("type", "semanal")
+    .order("created_at", { ascending: true });
+
+  const { data: specialEventsDB } = await supabase
+    .from("events")
+    .select("*")
+    .eq("type", "especial")
+    .order("created_at", { ascending: true });
+  
   return (
     <html
       lang="es"
@@ -31,7 +45,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col">
       <Toast.Provider />
-        <NavBar />
+        <NavBar events={{weeklyEventsDB, specialEventsDB}}/>
         <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
           <div className="flex h-full grow flex-col">
             <main className="flex-1 px-4 py-10 sm:px-10 lg:px-20 pt-22.5">

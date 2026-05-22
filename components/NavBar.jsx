@@ -1,8 +1,19 @@
+'use client'
+
 import Link from "next/link";
 import logo from "../public/logo.png";
 import Image from "next/image";
+import { useEvents } from "@/lib/store";
+import { useEffect } from "react";
 
-export default function NavBar() {
+export default function NavBar({events: {weeklyEventsDB,specialEventsDB}}) {  
+  const {loadSpecialEvents,loadWeeklyEvents} = useEvents();
+
+  useEffect(()=>{
+    loadSpecialEvents(specialEventsDB);
+    loadWeeklyEvents(weeklyEventsDB)
+  },[])
+
   return (
     <>
       <header className="flex items-center justify-between whitespace-nowrap border-b border-primary/20 px-10 py-4 fixed top-0 inset-x-0 bg-[#242424] z-2000">

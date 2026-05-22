@@ -1,22 +1,9 @@
 
 import "./page.css";
-import { supabase } from "../lib/supabase"
 import Carrousel from "../components/Carrousel"
 import Link from "next/link";
 
 export default async function Home() {
-
-  const { data: weeklyEvents } = await supabase
-    .from("events")
-    .select("*")
-    .eq("type", "semanal")
-    .order("created_at", { ascending: true });
-
-  const { data: specialEventsDB } = await supabase
-    .from("events")
-    .select("*")
-    .eq("type", "especial")
-    .order("created_at", { ascending: true });
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -40,7 +27,7 @@ export default async function Home() {
         <h2 className="text-center text-3xl font-bold">
           Próximos Eventos
         </h2>
-        <Carrousel elementsOfDB={{ specialEventsDB, weeklyEvents }} msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3} />
+        <Carrousel msgToEmpty={"No hay eventos nuevos, mira la lista de eventos semanales"} quantElement={3} />
       </section>
       {/* -------SERVICIOS------- */}
       <section>

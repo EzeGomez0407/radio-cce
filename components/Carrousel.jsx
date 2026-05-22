@@ -5,11 +5,11 @@ import { useCallback } from "react";
 import { useState } from "react";
 import { useEvents } from "../lib/store";
 
-export default function Carrousel({ elementsOfDB:{specialEventsDB,weeklyEvents}, quantElement, msgToEmpty }) {
-  const {loadSpecialEvents,loadWeeklyEvents} = useEvents();
+export default function Carrousel({ quantElement, msgToEmpty }) {
+  const {specialEvents} = useEvents();  
   
   //guardar solo la cantidad de elementos que se especifique de la lista que recibimos
-  const limitedElementsList = specialEventsDB.slice(0, quantElement);
+  const limitedElementsList = specialEvents.slice(0, quantElement);
   const [currentElement, setCurrentElement] = useState(0);
 
   // mostrar el siguiente elemento en el carrousel
@@ -26,15 +26,11 @@ export default function Carrousel({ elementsOfDB:{specialEventsDB,weeklyEvents},
   useEffect(() => {
     if (limitedElementsList.length <= 1) return;
 
-    const interval = setInterval(nextElement, 3500);
+    const interval = setInterval(nextElement, 5000);
 
     return () => clearInterval(interval);
   }, [limitedElementsList.length, nextElement, currentElement]);
 
-  useEffect(()=>{
-    loadSpecialEvents(specialEventsDB)
-    loadWeeklyEvents(weeklyEvents)
-},[])
   return (
     <div className="">
       <div className="flex justify-center gap-2 py-5">
