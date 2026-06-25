@@ -29,6 +29,7 @@ export default async function RootLayout({ children }) {
     .eq("type", "semanal")
     .order("created_at", { ascending: true });
 
+
   const { data: specialEventsDB } = await supabase
     .from("events")
     .select("*")
@@ -45,7 +46,12 @@ export default async function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col">
       <Toast.Provider />
-        <NavBar events={{weeklyEventsDB, specialEventsDB}}/>
+        <NavBar
+          events={{
+            weeklyEventsDB: weeklyEventsDB ? weeklyEventsDB : [],
+            specialEventsDB: specialEventsDB ? specialEventsDB : [],
+          }}
+        />
         <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
           <div className="flex h-full grow flex-col">
             <main className="flex-1 px-4 py-10 sm:px-10 lg:px-20 pt-22.5">
