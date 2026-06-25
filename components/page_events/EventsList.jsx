@@ -9,7 +9,6 @@ import { Chip } from "@heroui/react";
 export function EventsList() {
   const weeklyEvents = useEvents(state => state.weeklyEvents);
   const specialEvents = useEvents(state => state.specialEvents);
-    console.log(specialEvents);
     
   return (
     <>
